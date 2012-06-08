@@ -993,7 +993,7 @@ class DistributionFunctionC(DistributionFunction):
         """
         assert isinstance(n, int) and n > self.maxdeg
         # Eq. 6
-        actual_degdist = probmeasure.degdist_iterated(self.maxdeg, n)
+        actual_degdist = probmeasure.degdist_iterated(self.maxdeg, n, K=self.K)
         sumdd = sum(actual_degdist)
         degdist = self.degdist
         summa = sum(abs(actual_degdist[k]/degdist[k] - 1)
