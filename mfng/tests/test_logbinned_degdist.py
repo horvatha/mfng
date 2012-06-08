@@ -3,7 +3,7 @@
 
 """Unittest for the LogBinnedDegDist property class of mfng.py."""
 
-import cmfng
+import mfng
 import unittest
 import numpy
 import random
@@ -25,7 +25,7 @@ class LogBinnedDegDistTests(unittest.TestCase):
         "LogBinnedDegDist should have the proper binned_degdist"
         for degrees, binned_degdist in self.known_values:
             random.shuffle(degrees)
-            lbdd = cmfng.LogBinnedDegDist(degrees).binned_degdist
+            lbdd = mfng.LogBinnedDegDist(degrees).binned_degdist
             self.assertEqual(len(lbdd), len(binned_degdist))
             for i in range(len(binned_degdist)):
                 self.assertAlmostEqual(lbdd[i], binned_degdist[i])
@@ -45,7 +45,7 @@ class LogBinnerTests(unittest.TestCase):
     def testLogBinnerValues(self):
         "log_binner should give the proper values."
         for list_, binned in self.known_values:
-            self.assertEqual(cmfng.log_binner(list_), binned)
+            self.assertEqual(mfng.log_binner(list_), binned)
 
     bad_args = (
         [0,1,2,"a"],
@@ -56,7 +56,7 @@ class LogBinnerTests(unittest.TestCase):
     def testLogBinnerBadValues(self):
         "log_binner should raise ValueError for these arguments."
         for value in self.bad_args:
-            self.assertRaises(ValueError, cmfng.log_binner, value)
+            self.assertRaises(ValueError, mfng.log_binner, value)
 
 def suite():
     lbdegdist_suite = unittest.makeSuite(LogBinnedDegDistTests)

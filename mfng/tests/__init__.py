@@ -1,5 +1,5 @@
 import unittest
-from cmfng.tests import (test_analyzer, test_degdists,
+from mfng.tests import (test_analyzer, test_degdists,
         test_DistributionFuntion, test_generation, test_logbinned_degdist,
         test_probmeasure, test_step_number,)
 

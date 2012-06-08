@@ -3,7 +3,7 @@
 
 """Unittest for the target property classes of mfng.py."""
 
-import cmfng
+import mfng
 import unittest
 import numpy
 from known_values import known_values
@@ -12,12 +12,12 @@ class CreationTests(unittest.TestCase):
 
     def testDistributionFunctionValues(self):
         "The value of the DistributionFunction should be correct."
-        distfunc = cmfng.DistributionFunction("2*numpy.exp(-k)", 100)
+        distfunc = mfng.DistributionFunction("2*numpy.exp(-k)", 100)
         self.assertAlmostEqual(distfunc.value(numpy.log(8)), 0.25)
 
 #    def testEnergy(self):
-#        df=cmfng.DistributionFunction("2*numpy.exp(-k)", 100)
-#        pm=cmfng.ProbMeasure()
+#        df=mfng.DistributionFunction("2*numpy.exp(-k)", 100)
+#        pm=mfng.ProbMeasure()
 #        lpm=pm.iterate(3)
 #        self.assertAlmostEqual(df.energy(lpm, 400)[0], -97.436661566437408)
 #
@@ -25,9 +25,9 @@ class CreationTests(unittest.TestCase):
 #        divs= [0.13193312663039208, 1.0]
 #        probs=numpy.array([[ 0.25904704,  0.30615741],
 #               [ 0.30615741,  0.12863815]])
-#        pm=cmfng.ProbMeasure(divs, probs)
+#        pm=mfng.ProbMeasure(divs, probs)
 #        lpm=pm.iterate(3)
-#        df=cmfng.DistributionFunction("k**-3", 100, mindeg=1)
+#        df=mfng.DistributionFunction("k**-3", 100, mindeg=1)
 #        self.assertAlmostEqual(df.energy(lpm, 400)[0], -92.244977910442273)
 
 class EnergyTests(unittest.TestCase):
@@ -39,11 +39,11 @@ class EnergyTests(unittest.TestCase):
             probs  = known_values[i]["probs"]
             energy = known_values[i]["energy"]
 
-            pm = cmfng.ProbMeasure(divs, probs)
+            pm = mfng.ProbMeasure(divs, probs)
             lpm = pm.iterate(4)
-            prop = cmfng.DistributionFunction('k**-2', maxdeg=2000-1, mindeg=1)
+            prop = mfng.DistributionFunction('k**-2', maxdeg=2000-1, mindeg=1)
             self.assertAlmostEqual(prop.energy(lpm, 2000)[0], energy)
-            prop = cmfng.DistributionFunctionC('k**-2', maxdeg=2000-1, mindeg=1)
+            prop = mfng.DistributionFunctionC('k**-2', maxdeg=2000-1, mindeg=1)
             self.assertAlmostEqual(prop.energy(pm, 2000)[0], energy, places=4)
 
 def suite():

@@ -3,7 +3,7 @@
 
 """Unittest for analyzer.py."""
 
-import cmfng.analyzer as an
+import mfng.analyzer as an
 import numpy
 import unittest
 import os

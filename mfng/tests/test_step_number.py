@@ -5,7 +5,7 @@
 
 from __future__ import division
 from __future__ import print_function
-import cmfng
+import mfng
 import unittest
 
 class GenerationStepsTests(unittest.TestCase):
@@ -66,18 +66,18 @@ class GenerationStepsTests(unittest.TestCase):
             )
 
     def testStepNumber(self):
-        "The cmfng.steps sould give proper values."
+        "The mfng.steps sould give proper values."
         for range_, Tfactor, steps in self.known_values:
             T0 = .2
-            self.assertEqual(cmfng.steps(T0, Tfactor, T0/range_), steps)
-            self.assertEqual(cmfng.steps(T0, Tfactor, T0/float(range_)), steps)
+            self.assertEqual(mfng.steps(T0, Tfactor, T0/range_), steps)
+            self.assertEqual(mfng.steps(T0, Tfactor, T0/float(range_)), steps)
 
     def testTfactor(self):
-        "The cmfng.Tfactor sould give proper values."
+        "The mfng.Tfactor sould give proper values."
         for quotient in (1/10**_ for _ in range(3, 9)):
             for steps in (10**_ for _ in range(3, 9)):
                 T0 = .2
-                steps_ = cmfng.steps(T0, cmfng.get_Tfactor(quotient, steps), T0*quotient)
+                steps_ = mfng.steps(T0, mfng.get_Tfactor(quotient, steps), T0*quotient)
                 if (steps-steps_) != 0:
                     print(quotient, steps_)
                 self.assertEqual(steps_, steps)

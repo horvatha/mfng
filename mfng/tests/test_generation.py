@@ -5,13 +5,13 @@
 
 from __future__ import division
 from __future__ import print_function
-import cmfng
+import mfng
 import unittest
 import numpy
 import random
 import shutil
 import os
-from cmfng import analyzer
+from mfng import analyzer
 from known_values import known_values
 
 class GeneratorTests(unittest.TestCase):
@@ -21,19 +21,19 @@ class GeneratorTests(unittest.TestCase):
         if os.path.isdir(dir_):
             shutil.rmtree(dir_)
         properties = (
-            cmfng.AverageDegree(value=10),
-            cmfng.DistributionFunction("k**-2", maxdeg=10, mindeg=1),
-            cmfng.LogBinnedDegDist(degrees = [1] * 5 + [12]),
+            mfng.AverageDegree(value=10),
+            mfng.DistributionFunction("k**-2", maxdeg=10, mindeg=1),
+            mfng.LogBinnedDegDist(degrees = [1] * 5 + [12]),
             )
         for property_ in properties:
-            generator = cmfng.Generator(T0=.2, steps=10, Tlimit=.04)
+            generator = mfng.Generator(T0=.2, steps=10, Tlimit=.04)
             generator.append_property(property_)
             generator.go()
         for m in [2, 3, 4]:
-            generator = cmfng.Generator(T0=.2, steps=10, Tlimit=.04, m=m)
+            generator = mfng.Generator(T0=.2, steps=10, Tlimit=.04, m=m)
             generator.append_property(property_)
             generator.go()
-        generator = cmfng.Generator(T0=.2, steps=10, Tlimit=.04, n=400)
+        generator = mfng.Generator(T0=.2, steps=10, Tlimit=.04, n=400)
         generator.append_property(properties[0])
         generator.go()
         runs = analyzer.Runs()
@@ -44,26 +44,26 @@ class GeneratorTests(unittest.TestCase):
 
     def testAccept(self):
         "Generator should accept better ProbMeasures."
-        generator = cmfng.Generator(T0=.2, steps=10, Tlimit=.04, m=3)
-        generator.append_property(cmfng.DistributionFunction("k**-2", maxdeg=10, mindeg=1))
+        generator = mfng.Generator(T0=.2, steps=10, Tlimit=.04, m=3)
+        generator.append_property(mfng.DistributionFunction("k**-2", maxdeg=10, mindeg=1))
         for i in range(3):
             divs   = known_values[i]["divs"]
             probs  = known_values[i]["probs"]
             energy = known_values[i]["energy"]
-            self.assertTrue(generator.has_accepted(cmfng.ProbMeasure(divs, probs)))
+            self.assertTrue(generator.has_accepted(mfng.ProbMeasure(divs, probs)))
 
     def testBadM(self):
         "m should be integer and greater then 1"
         bad_m_values = [2.0, 2.3, 1, 0, -3, ]
         for m in bad_m_values:
-            self.assertRaises(AssertionError, cmfng.Generator,
+            self.assertRaises(AssertionError, mfng.Generator,
                     T0=.2, steps=10, Tlimit=.04, m=m)
 
     def testBadDivexponents(self):
         "divexponent should be positive integer"
         bad_divexponents = [1.0, 1.2, -1, 0]
         for divexponent in bad_divexponents:
-            self.assertRaises(AssertionError, cmfng.Generator, T0=.2, steps=10, Tlimit=.04, divexponent=divexponent)
+            self.assertRaises(AssertionError, mfng.Generator, T0=.2, steps=10, Tlimit=.04, divexponent=divexponent)
 
 def suite():
     generaror_suite = unittest.makeSuite(GeneratorTests)

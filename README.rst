@@ -10,6 +10,10 @@ Palla - Vicsek - Lovász: Multifractal network generator, PNAS, 2010
 Installation
 =============
 
+Download the source or clone from the github repository. The letter::
+
+    git clone git@github.com:horvatha/mfng.git
+
 Just use the standard method::
 
     sudo python setup.py install
