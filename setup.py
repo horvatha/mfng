@@ -20,7 +20,7 @@ Palla - Vicsek - Lovász: Multifractal network generator, PNAS, 2010
 """
 
 options = dict(
-    name = 'cmfng',
+    name = 'mfng',
     version = '0.3',
     description = 'Multifractal network generator',
     long_description = description,
@@ -30,7 +30,7 @@ options = dict(
     author_email = 'horvath.arpad.szfvar@gmail.com',
     url = 'http://www.arek.uni-obuda.hu/cxnet/doc/html',
 
-    packages = ['cmfng'],
+    packages = ['mfng'],
     #scripts = ['scripts/igraph'],
     #test_suite = "igraph.test.suite",
 

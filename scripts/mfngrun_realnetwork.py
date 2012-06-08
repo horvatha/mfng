@@ -3,7 +3,7 @@
 
 from __future__ import division
 from __future__ import print_function
-import cmfng
+import mfng
 import cxnet
 from cxnet.archives import get_netdata_directory
 import os
@@ -20,14 +20,14 @@ print("archive: {0}, n = {1}, max_degree = {2}".format(archive, n, max(degrees))
 for steps in [1000]*2:
     T0 = 0.2
     Tlimit = T0/10000
-    generator = cmfng.Generator(T0=T0, steps=steps, Tlimit=Tlimit,
+    generator = mfng.Generator(T0=T0, steps=steps, Tlimit=Tlimit,
             m=3, K=4,
             n=n,
             divexponent = 7,
             project = "2012_jan_realnetworks",
             )
     generator.append_property(
-            cmfng.LogBinnedDegDist(
+            mfng.LogBinnedDegDist(
                 degrees = degrees,
                 )
             )
