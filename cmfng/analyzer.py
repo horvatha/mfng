@@ -117,7 +117,6 @@ class Runs:
             project_dir = "project_%s" % project
         if not os.path.isdir(project_dir):
             raise NoProjectError(project)
-        self.out = Output(os.path.join(project_dir, "properties.txt"))
         self.project_dir = project_dir
         if isinstance(project, dict):
             runs = project
@@ -163,15 +162,15 @@ class Runs:
         Example::
 
             >>> sorted(r.runs.keys())  # All labels
-            ['200_007', '200_008', '200_009', '200_010', '200_011']
+            ['2000_007', '2000_008', '2000_009', '2000_010', '2000_011']
             >>> r.set_labels("all")
-            ['200_007', '200_008', '200_009', '200_010', '200_011']
-            >>> r.set_labels("200_008")
-            ['200_008']
-            >>> r.set_labels("200_01")
-            ['200_010', '200_011']
-            >>> r.set_labels(["200_009", "200_007"])
-            ['200_009', '200_007']
+            ['2000_007', '2000_008', '2000_009', '2000_010', '2000_011']
+            >>> r.set_labels("2000_008")
+            ['2000_008']
+            >>> r.set_labels("2000_01")
+            ['2000_010', '2000_011']
+            >>> r.set_labels(["2000_009", "2000_007"])
+            ['2000_009', '2000_007']
 
         """
         all_labels = self.runs.keys()
@@ -212,21 +211,21 @@ class Runs:
                avg max deg =  9.87+-1.0115993937, avg average deg=3.5651+-0.175231419857
 
         """
+        out = Output(os.path.join(self.project_dir, "properties.txt"))
         assert isinstance(n, int) and n>0
         if not isinstance(self.labels, list) or not self.labels:
             raise NoLabelsError
         for label in self.labels:
             run = self.runs[label]
             doubleline = "=" * 20
-            self.out.write(doubleline)
-            self.out.write("label = %s" % label)
-            #self.out.write(doubleline)
+            out.write(doubleline)
+            out.write("label = %s" % label)
 
             divs, probs = run["divs"], run["probs"]
             pm = mfng.ProbMeasure(divs, probs)
             K = run.get("K") or run.get("k")  # Older files have k instead of K.
             ipm = pm.iterate(K=K)
-            self.out.write("number of generated networks = %s\ndivs = %s,\nprobs=%s" % (n,divs, probs))
+            out.write("number of generated networks = %s\ndivs = %s,\nprobs=%s" % (n,divs, probs))
             maxdegs = []
             avgdegs = []
             for i in range(n):
@@ -236,8 +235,9 @@ class Runs:
                 avgdegs.append(pylab.average(deg))
             avgmaxdeg, avgmaxdegsigma = avg_sigma(maxdegs)
             avgavgdeg, avgavgdegsigma = avg_sigma(avgdegs)
-            self.out.write("\navg max deg = %5s+-%5s, avg average deg=%5s+-%5s\n" %
+            out.write("\navg max deg = %5s+-%5s, avg average deg=%5s+-%5s\n" %
                     (avgmaxdeg, avgmaxdegsigma, avgavgdeg, avgavgdegsigma))
+        del out
 
     def degdist(self, label=None, initial=False):
         """Returns with the degdist object."""
