@@ -996,10 +996,10 @@ class DistributionFunctionC(DistributionFunction):
         actual_degdist = probmeasure.degdist_iterated(self.maxdeg, n, K=self.K)
         sumdd = sum(actual_degdist)
         degdist = self.degdist
-        summa = sum(abs(actual_degdist[k]/degdist[k] - 1)
-                    for k in range(self.mindeg, self.maxdeg+1))
-        #summa = sum(abs(degdist[k] - actual_degdist[k])/max(degdist[k], actual_degdist[k])
-        #        for k in xrange(self.mindeg, self.maxdeg+1))
+        #summa = sum(abs(actual_degdist[k]/degdist[k] - 1)
+        #            for k in range(self.mindeg, self.maxdeg+1))
+        summa = sum(abs(degdist[k] - actual_degdist[k])/max(degdist[k], actual_degdist[k])
+                for k in xrange(self.mindeg, self.maxdeg+1))
         return float(summa), sumdd
 
 def log_binner(num_list):
