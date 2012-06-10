@@ -184,7 +184,14 @@ class ProbMeasure(object):
         fd_arr=fd.readlines()
         fd.close()
 
-        return(numpy.array(map(float, string.split(fd_arr[0]))))
+        try:
+            values = numpy.array(map(float, string.split(fd_arr[0])))
+        except IndexError:
+            print("You need to complile iterate.cpp and the result must be in the PATH.")
+            print("g++ -o iterate iterate.cpp")
+            print("export PATH=${PATH}:path_to/scripts")
+            sys.exit(10)
+        return values
 
     def degdist_numpy(self, maxdeg, n, mindeg=0):
         """Returns the degree distribution from mindeg to maxdeg degree.
@@ -219,7 +226,6 @@ class ProbMeasure(object):
 
         assert isinstance(n, int)
         assert isinstance(maxdeg, int)
-        assert n > maxdeg
         divs = self.divs
         n_intervals = len(divs)
         lengths = [divs[i] - divs[i-1] for i in xrange(1, n_intervals)]
