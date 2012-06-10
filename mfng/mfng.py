@@ -596,7 +596,6 @@ class Generator(object):
         self.out.write("=============================================\n"
               "The properties of the Generator object"
               )
-        self.out.write(self.settings())
         self.out.write("date = %s" % hms(time()))
         if not isinstance(steps, int):
             steps = int(steps)
@@ -730,74 +729,46 @@ class Generator(object):
 
         return self.probmeasure
 
-    def settings(self, compact=False):
+    def settings(self):
         """Gives the settings as string"""
 
-        if compact:
-            form = (
-            "     T0=%s,  Tfactor=%s, Tlimit=%s,\n"
-            "     m=%s, K=%s,\n"
-            "     n=%s,\n"
+        properties = ",\n        ".join(['"%s"' % prop.name for prop in self.properties])
+        return (
+            "     T0=%s,  Tfactor=%s, Tlimit=%s, steps=%d,\n"
+            "     m=%s, K=%s, "
+            "     n=%s, "
             "     divexponent=%s,\n"
             "     properties= [\n        %s\n     ],"
-            )
-        else:
-            form = (
-            "======================================\n"
-            "T0 = %s,  Tfactor = %s, Tlimit = %s\n"
-            "m=%s, K=%s\n"
-            "n=%s\n"
-            "divexponent=%s\n"
-            "Properties:\n        %s\n"
-            )
-        pm = self.probmeasure
-
-        properties = ",\n        ".join(['"%s"' % prop.name for prop in self.properties])
-        return form % (
+            ) % (
                 self.T0, self.Tfactor, self.Tlimit,
-                pm.m, self.K,
+                self.step,
+                self.probmeasure.m, self.K,
                 self.n,
                 self.divexponent,
                 properties,
                 )
 
-    def results(self, with_settings=True, with_accept=False, compact=False):
+    def results(self, with_settings=True, with_accept=False):
         """Gives the result as string"""
 
         pm = self.probmeasure
         runtime = (self.stoptime - self.starttime)/60
-        if compact:
-            acceptform = "\n     accept_reject = \"%s\","
-            form = (
+        results = (
                 "     divs= %s,\n"
                 "     probs=\\\n       %s,\n"
-                "     #Energies\n       Ei =%10f, #Initial\n       Ef =%10f, #Final\n"
+                "     Ef=%10f, Ei=%10f, #Final/Initial energy\n"
                 "     runtime =  %f, # minutes (%s -- %s)\n"
-                "     steps =  %d,\n"
-                )
-        else:
-            acceptform = "Accept with Enew < E (A) or with Enew > E (a); reject (.):\n%s\n"
-            form= (
-                "______________________________________\n"
-                "Division points and the probability matrix\n"
-                "divs= %s\n"
-                "probs=\\\n%s\n"
-                "Energies\n Initial E=%s\n Final   E=%s\n"
-                "Runtime %f min (%s -- %s)\n"
-                "Steps =  %d\n"
-                )
-        results =  form % (
+                ) % (
                 pm.divs,
                 repr(pm.probs),
-                self.Ei,
                 self.E,
+                self.Ei,
                 runtime, hms(self.starttime), hms(self.stoptime),
-                self.step,
                 )
         if with_settings:
-            results = self.settings(compact=compact) + results
+            results = self.settings() + results
         if with_accept:
-            results += acceptform % self.accept_reject
+            results += "     accept_reject = \"%s\",\n" % self.accept_reject
         return results
 
 
@@ -827,12 +798,12 @@ class Generator(object):
             "  # Settings\n"
             "%s\n"
             "  # Results\n"
-            "%s\n\n"
+            "%s"
             ")\n\n"
             ) % (
             label,
-            self.settings(compact=True),
-            self.results(compact=True, with_settings=False, with_accept=True)
+            self.settings(),
+            self.results(with_settings=False, with_accept=False)
             )
 
         rf = open(runsfile, "a")
