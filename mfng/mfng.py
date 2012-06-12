@@ -968,7 +968,7 @@ class DistributionFunctionC(DistributionFunction):
                 degree distribution from the link probability measure for.
 
         """
-        assert isinstance(n, int) and n > self.maxdeg
+        assert isinstance(n, int)
         # Eq. 6
         actual_degdist = probmeasure.degdist_iterated(self.maxdeg, n, K=self.K)
         sumdd = sum(actual_degdist)
