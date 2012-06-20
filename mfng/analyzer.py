@@ -64,7 +64,7 @@ class ProbMeasure(mfng.ProbMeasure):
             for tick in ax.yaxis.get_major_ticks():
                 tick.label1On=False
         return ax
-    def iterate(self, K=3, maxdivs=250):
+    def iterate(self, K=3, maxdivs=730):
         """Create a multifractal network with (K-1) iteration.
 
         We need to redefined to give back the Probmeasure module with plot in this modul.
@@ -76,7 +76,7 @@ class ProbMeasure(mfng.ProbMeasure):
                   "If you know, what do you do, set the maxdivs parameter of iterate method higher."
                   .format(divnum=divnum, maxdivs=maxdivs))
         divs, probs = self.__iterate_divs(K), self.__iterate_probs(K)
-        return ProbMeasure(divs, probs)
+        return ProbMeasure(divs, probs, output=self.out, iterated=True)
 
 
 def avg_sigma(numlist):
