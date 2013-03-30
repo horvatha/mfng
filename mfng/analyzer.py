@@ -43,7 +43,7 @@ class ProbMeasure(mfng.ProbMeasure):
 
     It uses pylab to plot the measure.
     """
-    def plot(self, ticklabels=True, **kwargs):
+    def plot(self, ticklabels=True, colorbar=True, **kwargs):
         """Plots the Probability measure.
 
         Parameters:
@@ -54,8 +54,16 @@ class ProbMeasure(mfng.ProbMeasure):
         X=Y=pylab.array([0] + self.divs)
         fig = pylab.figure()
         ax = fig.add_subplot(111)
-        plt = ax.pcolor(X,Y,self.probs, **kwargs)
+        #if "cmap" not in kwargs:
+        #    kwargs["cmap"] = pylab.cm.Blues
+        pylab.pcolor(X,Y,self.probs, **kwargs)
         pylab.axis((0,1,1,0))
+        title = "Link probability measure" if self.iterated else "Generating measure"
+        pylab.suptitle(title)
+        # Perhaps in matplotlib >1.1 should use title instead of suptitle and
+        # matplotlib.pyplot.tight_layout
+        if colorbar:
+            pylab.colorbar()
         for tick in ax.xaxis.get_major_ticks():
             if ticklabels:
                 tick.label2On=True
@@ -64,6 +72,7 @@ class ProbMeasure(mfng.ProbMeasure):
             for tick in ax.yaxis.get_major_ticks():
                 tick.label1On=False
         return ax
+
     def iterate(self, K=3, maxdivs=730):
         """Create a multifractal network with (K-1) iteration.
 
