@@ -307,9 +307,19 @@ class Runs:
             exec("df={0}".format(properties[0]))
             pylab.plot(df.degdist, "b:", label="target dist.")
             maxdeg, mindeg = df.maxdeg, df.mindeg
+            title= 'Deg. dist. {label} ' +\
+                '(m={m},K={K},n={n},maxdeg={maxdeg},steps={steps})'.format(
+                    maxdeg=maxdeg, label=label, **run)
         else:
-            mindeg = kwargs.get("mindeg", 1)
-            maxdeg = kwargs.get("maxdeg", int(0.03*n)) # TODO What should be maxdeg?
+            mindeg = 1
+            maxdeg = int(0.03*n) # TODO What should be maxdeg?
+            title= 'Deg. dist. {label} ' +\
+                '(m={m},K={K},n={n},steps={steps})'.format(
+                    label=label, **run)
+        if "mindeg" in kwargs:
+            mindeg = kwargs.get("mindeg")
+        if "maxdeg" in kwargs:
+            maxdeg = kwargs.get("maxdeg")
 
         dd = self.degdist(label)
         dd.set_binning(binning)
@@ -332,9 +342,7 @@ class Runs:
         axis_ = list(pylab.axis())
         axis_[2]=.01/n
         pylab.axis(axis_)
-        pylab.title('Deg. dist. {label} '
-                '(m={m},K={K},n={n},maxdeg={maxdeg},steps={steps})'.format(
-                    maxdeg=maxdeg, label=label, **run))
+        pylab.title(title)
         return label
 
     def probmeasure(self, iterated=True, initial=False, **kwargs):
