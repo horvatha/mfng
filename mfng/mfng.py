@@ -389,7 +389,7 @@ class ProbMeasure(object):
                     probs[i,j] *= self.probs[ilist[it], jlist[it]]
         return probs
 
-    def iterate(self, K=3, maxdivs=250):
+    def iterate(self, K=3, maxdivs=730):
         """Create a multifractal network with (K-1) iteration."""
         m = len(self.divs)
         divnum = m**K

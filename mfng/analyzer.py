@@ -43,7 +43,7 @@ class ProbMeasure(mfng.ProbMeasure):
 
     It uses pylab to plot the measure.
     """
-    def plot(self, ticklabels=True, **kwargs):
+    def plot(self, ticklabels=True, colorbar=True, **kwargs):
         """Plots the Probability measure.
 
         Parameters:
@@ -54,8 +54,16 @@ class ProbMeasure(mfng.ProbMeasure):
         X=Y=pylab.array([0] + self.divs)
         fig = pylab.figure()
         ax = fig.add_subplot(111)
-        plt = ax.pcolor(X,Y,self.probs, **kwargs)
+        #if "cmap" not in kwargs:
+        #    kwargs["cmap"] = pylab.cm.Blues
+        pylab.pcolor(X,Y,self.probs, **kwargs)
         pylab.axis((0,1,1,0))
+        title = "Link probability measure" if self.iterated else "Generating measure"
+        pylab.suptitle(title)
+        # Perhaps in matplotlib >1.1 should use title instead of suptitle and
+        # matplotlib.pyplot.tight_layout
+        if colorbar:
+            pylab.colorbar()
         for tick in ax.xaxis.get_major_ticks():
             if ticklabels:
                 tick.label2On=True
@@ -64,7 +72,8 @@ class ProbMeasure(mfng.ProbMeasure):
             for tick in ax.yaxis.get_major_ticks():
                 tick.label1On=False
         return ax
-    def iterate(self, K=3, maxdivs=250):
+
+    def iterate(self, K=3, maxdivs=730):
         """Create a multifractal network with (K-1) iteration.
 
         We need to redefined to give back the Probmeasure module with plot in this modul.
@@ -76,7 +85,7 @@ class ProbMeasure(mfng.ProbMeasure):
                   "If you know, what do you do, set the maxdivs parameter of iterate method higher."
                   .format(divnum=divnum, maxdivs=maxdivs))
         divs, probs = self.__iterate_divs(K), self.__iterate_probs(K)
-        return ProbMeasure(divs, probs)
+        return ProbMeasure(divs, probs, output=self.out, iterated=True)
 
 
 def avg_sigma(numlist):
@@ -298,9 +307,19 @@ class Runs:
             exec("df={0}".format(properties[0]))
             pylab.plot(df.degdist, "b:", label="target dist.")
             maxdeg, mindeg = df.maxdeg, df.mindeg
+            title= 'Deg. dist. {label} ' +\
+                '(m={m},K={K},n={n},maxdeg={maxdeg},steps={steps})'.format(
+                    maxdeg=maxdeg, label=label, **run)
         else:
-            mindeg = kwargs.get("mindeg", 1)
-            maxdeg = kwargs.get("maxdeg", int(0.03*n)) # TODO What should be maxdeg?
+            mindeg = 1
+            maxdeg = int(0.03*n) # TODO What should be maxdeg?
+            title= 'Deg. dist. {label} ' +\
+                '(m={m},K={K},n={n},steps={steps})'.format(
+                    label=label, **run)
+        if "mindeg" in kwargs:
+            mindeg = kwargs.get("mindeg")
+        if "maxdeg" in kwargs:
+            maxdeg = kwargs.get("maxdeg")
 
         dd = self.degdist(label)
         dd.set_binning(binning)
@@ -323,9 +342,7 @@ class Runs:
         axis_ = list(pylab.axis())
         axis_[2]=.01/n
         pylab.axis(axis_)
-        pylab.title('Deg. dist. {label} '
-                '(m={m},K={K},n={n},maxdeg={maxdeg},steps={steps})'.format(
-                    maxdeg=maxdeg, label=label, **run))
+        pylab.title(title)
         return label
 
     def probmeasure(self, iterated=True, initial=False, **kwargs):

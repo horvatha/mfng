@@ -67,7 +67,7 @@ class IterationValuesTests(unittest.TestCase):
     def testTooManyDivs(self):
         m  = 4
         pm = mfng.simpleProbMeasure(m=m)
-        K = 4
+        K = 5
         # 4**4 = 216
         self.assertRaises(ValueError, pm.iterate, K=K)
 
