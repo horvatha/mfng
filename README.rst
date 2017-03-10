@@ -24,9 +24,9 @@ how to do it on Windows.::
 
     cd scripts
     make
-    echo >> ~/.bashrc PATH=${PATH}:<path_to_the_scripts_directory>
+    echo PATH=${PATH}:<path_to_the_scripts_directory> >> ~/.bashrc
 
 Tutorial and library reference
 ==================================
 The documentation have been included in `the documentation of the cxnet
-package <http://django.arek.uni-obuda.hu/cxnet/doc>`_.
+package <https://pythonhosted.org/cxnet/mfng_en.html>`_.
